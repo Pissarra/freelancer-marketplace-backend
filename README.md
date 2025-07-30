@@ -31,6 +31,28 @@
 $ npm install
 ```
 
+## Database setup 
+
+```bash
+$   npx typeorm migration:run -d dist/typeorm-cli.config
+```
+
+## Environment Configuration
+
+Make sure to create a `.env` file in the **root** of your project to configure the application.  
+The following environment variables are **required**:
+
+```
+DATABASE_USER=postgres
+DATABASE_PASSWORD=root
+DATABASE_NAME=postgres
+DATABASE_PORT=5432
+DATABASE_HOST=localhost
+DATABASE_SYNCHRONIZE=false
+```
+
+* It is recommended to set `DATABASE_SYNCHRONIZE` to `false` in production environments to avoid data loss. However, you can set it to `true` during development for automatic schema synchronization, so you will not need to run the migrations.
+
 ## Compile and run the project
 
 ```bash
@@ -57,42 +79,76 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Architecture overview
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+```
+freelancer-marketplace/
+├── src/
+│   ├── auth/           # authentication module (JWT, Controller, Interceptors, etc)
+│   ├── common/         # entities, enums, etc.
+│   │   ├── entities/   # common entities/domains used across the application
+│   ├── config/         # configuration files (database, Swagger, AWS_S3, etc.)
+│   ├── database/       # database migrations and seeds
+│   ├── modules/        # application modules (only Freelancer and User modules in this example)
+│   │   ├── <MODULE_1>/
+│   │   │   ├── dto/        # Data Transfer Objects
+│   │   │   ├── controller  # HTTP request handlers
+│   │   │   ├── service     # business logic
+│   │   │   ├── repository  # database access layer (optional, if you need more abstraction or custom queries)
+│   ├── app.controller.ts
+│   ├── app.controller.spec.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── test/
+│   └── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── .gitignore
+├── ...
+├── package.json
+├── README.md
+├── ...
+└── typeorm-cli.config.ts # TypeORM CLI configuration file (used for running migrations and seeds)
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+## Trade-offs or areas for improvement
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Improvements can be made in the following areas:
 
-## Support
+- Configure the application to check the required environment variables before starting, to ensure that the application has all the necessary configurations.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+$ npm install @hapi/joi
+$ npm install --save-dev @types/hapi__joi
+```
 
-## Stay in touch
+```
+// Example of how to use Joi for environment variable validation in `app.module.ts`:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+ConfigModule.forRoot({
+  validationSchema: Joi.object({
+    DATABASE_HOST: Joi.required(),
+    DATABASE_PORT: Joi.number().default(5432),
+  }),
+}),
+```
+- Split migrations between development and production environments to avoid conflicts. For example, it is better to only run the seed migration (which populates the database with initial data) in development environments.
+- Adding logs to the application to track important events and errors.
+- Adding error handling to manage exceptions.
+- Add Swagger to provide interactive API documentation and testing.
 
-## License
+## Docker (optional)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+* Start containers in detached / background mode
+```
+docker-compose up -d
+```
+
+* Stop containers
+```
+docker-compose down
+```
