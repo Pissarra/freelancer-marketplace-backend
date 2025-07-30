@@ -141,7 +141,7 @@ ConfigModule.forRoot({
 - Adding error handling to manage exceptions.
 - Add Swagger to provide interactive API documentation and testing.
 
-## Docker
+## Docker (optional)
 
 * Start containers in detached / background mode
 ```
