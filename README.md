@@ -120,7 +120,15 @@ freelancer-marketplace/
 Improvements can be made in the following areas:
 
 - Configure the application to check the required environment variables before starting, to ensure that the application has all the necessary configurations.
+
 ```
+$ npm install @hapi/joi
+$ npm install --save-dev @types/hapi__joi
+```
+
+```
+// Example of how to use Joi for environment variable validation in `app.module.ts`:
+
 ConfigModule.forRoot({
   validationSchema: Joi.object({
     DATABASE_HOST: Joi.required(),
