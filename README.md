@@ -82,6 +82,7 @@ $ npm run test:cov
 
 ## Architecture overview
 
+```
 freelancer-marketplace/
 ├── src/
 │   ├── auth/           # authentication module (JWT, Controller, Interceptors, etc)
@@ -110,16 +111,27 @@ freelancer-marketplace/
 ├── ...
 └── typeorm-cli.config.ts # TypeORM CLI configuration file (used for running migrations and seeds)
 
+```
+
 
 
 ## Trade-offs or areas for improvement
 
 Improvements can be made in the following areas:
 
+- Configure the application to check the required environment variables before starting, to ensure that the application has all the necessary configurations.
+```
+ConfigModule.forRoot({
+  validationSchema: Joi.object({
+    DATABASE_HOST: Joi.required(),
+    DATABASE_PORT: Joi.number().default(5432),
+  }),
+}),
+```
 - Split migrations between development and production environments to avoid conflicts. For example, it is better to only run the seed migration (which populates the database with initial data) in development environments.
-- Adding logs to the application to track the flow of requests and responses.
+- Adding logs to the application to track important events and errors.
 - Adding error handling to manage exceptions.
-- Adding Swagger documentation to the API for better usability.
+- Add Swagger to provide interactive API documentation and testing.
 
 ## Docker
 
