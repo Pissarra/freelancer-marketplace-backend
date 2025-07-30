@@ -37,6 +37,22 @@ $ npm install
 $   npx typeorm migration:run -d dist/typeorm-cli.config
 ```
 
+## Environment Configuration
+
+Make sure to create a `.env` file in the **root** of your project to configure the application.  
+The following environment variables are **required**:
+
+```
+DATABASE_USER=postgres
+DATABASE_PASSWORD=root
+DATABASE_NAME=postgres
+DATABASE_PORT=5432
+DATABASE_HOST=localhost
+DATABASE_SYNCHRONIZE=false
+```
+
+* It is recommended to set `DATABASE_SYNCHRONIZE` to `false` in production environments to avoid data loss. However, you can set it to `true` during development for automatic schema synchronization, so you will not need to run the migrations.
+
 ## Compile and run the project
 
 ```bash
@@ -66,6 +82,33 @@ $ npm run test:cov
 
 ## Architecture overview
 
+freelancer-marketplace/
+├── src/
+│   ├── auth/           # authentication module (JWT, Controller, Interceptors, etc)
+│   ├── common/         # entities, enums, etc.
+│   │   ├── entities/   # common entities/domains used across the application
+│   ├── config/         # configuration files (database, Swagger, AWS_S3, etc.)
+│   ├── database/       # database migrations and seeds
+│   ├── modules/        # application modules (only Freelancer and User modules in this example)
+│   │   ├── <MODULE_1>/
+│   │   │   ├── dto/        # Data Transfer Objects
+│   │   │   ├── controller  # HTTP request handlers
+│   │   │   ├── service     # business logic
+│   │   │   ├── repository  # database access layer (optional, if you need more abstraction or custom queries)
+│   ├── app.controller.ts
+│   ├── app.controller.spec.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── test/
+│   └── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── .gitignore
+├── ...
+├── package.json
+├── README.md
+├── ...
+└── typeorm-cli.config.ts # TypeORM CLI configuration file (used for running migrations and seeds)
 
 
 
@@ -73,7 +116,7 @@ $ npm run test:cov
 
 Improvements can be made in the following areas:
 
-- Split migrations between development and production environments to avoid conflicts.
+- Split migrations between development and production environments to avoid conflicts. For example, it is better to only run the seed migration (which populates the database with initial data) in development environments.
 - Adding logs to the application to track the flow of requests and responses.
 - Adding error handling to manage exceptions.
 - Adding Swagger documentation to the API for better usability.
