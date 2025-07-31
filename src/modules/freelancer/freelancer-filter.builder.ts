@@ -54,7 +54,6 @@ export class FreelancerFilterBuilder {
   }
 
   applyPermissionsFilter(permissions?: string[]): this {
-    console.info('Applying permissions filter:', permissions);
     if (permissions && permissions.length) {
       this.qb.innerJoin(
         'freelancer.allowedPermissions',

@@ -31,12 +31,6 @@
 $ npm install
 ```
 
-## Database setup 
-
-```bash
-$   npx typeorm migration:run -d dist/typeorm-cli.config
-```
-
 ## Environment Configuration
 
 Make sure to create a `.env` file in the **root** of your project to configure the application.  
@@ -49,9 +43,25 @@ DATABASE_NAME=postgres
 DATABASE_PORT=5432
 DATABASE_HOST=localhost
 DATABASE_SYNCHRONIZE=false
+
+JWT_SECRET=FREELANCER_SECRET_KEY_HERE
+JWT_TOKEN_AUDIENCE=localhost:3000
+JWT_TOKEN_ISSUER=localhost:3000
+JWT_ACCESS_TOKEN_TTL=3600
+
+CORS_ORIGIN=http://localhost:4000
 ```
 
 * It is recommended to set `DATABASE_SYNCHRONIZE` to `false` in production environments to avoid data loss. However, you can set it to `true` during development for automatic schema synchronization, so you will not need to run the migrations.
+
+## Database setup
+
+```bash
+   npm run build
+   npx typeorm migration:run -d dist/typeorm-cli.config
+```
+
+* It will use environment variables from the `.env` file to connect to the database and run migrations.
 
 ## Compile and run the project
 
@@ -88,8 +98,9 @@ $ npm run test:cov
 
 ```
 freelancer-marketplace/
+├── docker/             # Docker configuration files
 ├── src/
-│   ├── auth/           # authentication module (JWT, Controller, Interceptors, etc)
+│   ├── auth/           # authentication module (JWT, Controller, Interceptors, Guards, etc)
 │   ├── common/         # entities, enums, etc.
 │   │   ├── entities/   # common entities/domains used across the application
 │   ├── config/         # configuration files (database, Swagger, AWS_S3, etc.)
@@ -154,16 +165,5 @@ ConfigModule.forRoot({
 - Add Swagger to provide interactive API documentation and testing.
 
 4. **Testing**:
+- Add e2e tests to ensure the application works as expected in a production-like environment.
 - Add CI/CD pipeline to automate testing for each PR.
-
-## Docker (optional)
-
-* Start containers in detached / background mode
-```
-docker-compose up -d
-```
-
-* Stop containers
-```
-docker-compose down
-```
