@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Freelancer } from '../../common/entities/freelancer.entity';
 import { FreelancerFilterBuilder } from './freelancer-filter.builder';
 import { Repository } from 'typeorm';
+import { JwtUserData } from '../../auth/interfaces/user.interface';
 
 @Injectable()
 export class FreelancerService {
@@ -16,15 +17,14 @@ export class FreelancerService {
   getAll(
     page: number,
     limit: number,
+    user: JwtUserData, // Assuming ActiveUserData is defined in your auth module
     filters?: FreelancerFilterDto,
   ): Promise<FreelancerDto[]> {
     const qb = this.repo.createQueryBuilder('freelancer');
 
-    const permissions = []; // TODO
-
     const builder = new FreelancerFilterBuilder(qb, filters)
       .applyFilters()
-      .applyPermissionsFilter(permissions);
+      .applyPermissionsFilter( user.permissions);
 
     return builder
       .build()

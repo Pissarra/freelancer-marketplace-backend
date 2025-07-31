@@ -58,7 +58,7 @@ describe('FreelancerFilterBuilder', () => {
 
   it('should apply available and skills filters', () => {
     const filter: FreelancerFilterDto = {
-      available: true,
+      availableOnly: true,
       skills: ['NestJS', 'TypeScript'],
     };
 

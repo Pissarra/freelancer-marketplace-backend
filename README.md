@@ -79,6 +79,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Users
+
+- User: admin@mail.test, Password: 1234
+- User: user@mail.test, Password: 4321
 
 ## Architecture overview
 
@@ -93,15 +97,16 @@ freelancer-marketplace/
 │   ├── modules/        # application modules (only Freelancer and User modules in this example)
 │   │   ├── <MODULE_1>/
 │   │   │   ├── dto/        # Data Transfer Objects
+│   │   │   ├── tests*       # unit tests for the module
 │   │   │   ├── controller  # HTTP request handlers
 │   │   │   ├── service     # business logic
-│   │   │   ├── repository  # database access layer (optional, if you need more abstraction or custom queries)
+│   │   │   └── repository  # database access layer (optional, if you need more abstraction or custom queries)
 │   ├── app.controller.ts
 │   ├── app.controller.spec.ts
 │   ├── app.module.ts
 │   ├── app.service.ts
 │   └── main.ts
-├── test/
+├── test/                   # end-to-end tests (e2e)
 │   └── app.e2e-spec.ts
 │   └── jest-e2e.json
 ├── .gitignore
@@ -118,6 +123,9 @@ freelancer-marketplace/
 ## Trade-offs or areas for improvement
 
 Improvements can be made in the following areas:
+
+0. **Security**
+- Implement refresh tokens to enhance security.
 
 1. ** Environment Variable Validation**:
 - Configure the application to check the required environment variables before starting, to ensure that the application has all the necessary configurations.

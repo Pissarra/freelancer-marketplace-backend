@@ -19,6 +19,14 @@ export class CreateFreelancerSchema1753825554586 implements MigrationInterface {
     `);
 
     await queryRunner.query(`
+        CREATE TABLE "auth_user" (
+          "id" SERIAL PRIMARY KEY,
+          "email" VARCHAR NOT NULL,
+          "password" VARCHAR NOT NULL
+        );
+    `);
+
+    await queryRunner.query(`
       CREATE TABLE "freelancer" (
         "id" SERIAL PRIMARY KEY,
         "name" VARCHAR NOT NULL,
@@ -49,12 +57,24 @@ export class CreateFreelancerSchema1753825554586 implements MigrationInterface {
         CONSTRAINT "FK_permission" FOREIGN KEY ("permission_id") REFERENCES "permission"("id") ON DELETE CASCADE
       );
     `);
+
+    await queryRunner.query(`
+      CREATE TABLE "user_permissions_permission" (
+        "user_id" INTEGER NOT NULL,
+        "permission_id" INTEGER NOT NULL,
+        PRIMARY KEY ("user_id", "permission_id"),
+        CONSTRAINT "FK_user" FOREIGN KEY ("user_id") REFERENCES "auth_user"("id") ON DELETE CASCADE,
+        CONSTRAINT "FK_permission" FOREIGN KEY ("permission_id") REFERENCES "permission"("id") ON DELETE CASCADE
+      );
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE "user_permissions_permission"`);
     await queryRunner.query(`DROP TABLE "freelancer_permissions_permission"`);
     await queryRunner.query(`DROP TABLE "freelancer_skills_skill"`);
     await queryRunner.query(`DROP TABLE "freelancer"`);
+    await queryRunner.query(`DROP TABLE "user"`);
     await queryRunner.query(`DROP TABLE "skill"`);
     await queryRunner.query(`DROP TABLE "permission"`);
   }
