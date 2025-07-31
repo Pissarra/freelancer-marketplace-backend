@@ -1,8 +1,10 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { FreelancerService } from './freelancer.service';
 import { FreelancerFilterDto } from './dtos/freelancer-filter.dto';
+import { ActiveUser } from '../../auth/decorator/active-user.decorator';
+import { JwtUserData } from '../../auth/interfaces/user.interface';
 
-@Controller('freelancers')
+@Controller('api/freelancers')
 export class FreelancerController {
   constructor(private readonly service: FreelancerService) {}
 
@@ -16,8 +18,9 @@ export class FreelancerController {
   async getAll(
     @Query('page') page: number,
     @Query('limit') limit: number,
+    @ActiveUser() user: JwtUserData,
     @Body() filters?: FreelancerFilterDto,
   ) {
-    return this.service.getAll(page, limit, filters);
+    return this.service.getAll(page, limit, user, filters);
   }
 }

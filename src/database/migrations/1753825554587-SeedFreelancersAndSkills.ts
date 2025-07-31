@@ -29,6 +29,11 @@ export class SeedFreelancersAndSkills1753825554587
       ('João Pedro', 'Recife', 'GMT-3', 90.0, 4.9, true);
     `);
 
+    await queryRunner.query(`INSERT INTO auth_user (email, password) VALUES 
+                                            ('admin@mail.test', '$2b$10$EvnwYkBqUNzEn3nQPar/Vu0kX.vo/cfNqN1HDU5bVPKgNKYdzyPky'), 
+                                            ('user@mail.test', '$2b$10$Y8/gJT.YJxoVW3RR0u3FUuVZBeVMPSdCrXj6DMxAo4zfWF6Jn6UF2');
+    `);
+
     await queryRunner.query(`
       INSERT INTO freelancer_skills_skill (freelancer_id, skill_id) VALUES
       (1, 1), (1, 2), (1, 3),
@@ -56,11 +61,19 @@ export class SeedFreelancersAndSkills1753825554587
       (9, 1),
       (10, 1), (10, 2);
     `);
+
+    await queryRunner.query(`
+      INSERT INTO user_permissions_permission (user_id, permission_id) VALUES
+      (1, 1),
+      (2, 1), (2, 2);
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DELETE FROM user_permissions_permission`);
     await queryRunner.query(`DELETE FROM freelancer_permissions_permission`);
     await queryRunner.query(`DELETE FROM freelancer_skills_skill`);
+    await queryRunner.query(`DELETE FROM user`);
     await queryRunner.query(`DELETE FROM freelancer`);
     await queryRunner.query(`DELETE FROM skill`);
     await queryRunner.query(`DELETE FROM permission`);

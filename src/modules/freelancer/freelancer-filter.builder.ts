@@ -15,7 +15,7 @@ export class FreelancerFilterBuilder {
       hourlyRateMin,
       hourlyRateMax,
       ratingMin,
-      available,
+      availableOnly,
       skills,
     } = this.filter || {};
 
@@ -38,8 +38,8 @@ export class FreelancerFilterBuilder {
     if (ratingMin !== undefined) {
       this.qb.andWhere('freelancer.rating >= :ratingMin', { ratingMin });
     }
-    if (available !== undefined) {
-      this.qb.andWhere('freelancer.available = :available', { available });
+    if (availableOnly) {
+      this.qb.andWhere('freelancer.available is true');
     }
     if (skills && skills.length) {
       this.qb.innerJoin(
