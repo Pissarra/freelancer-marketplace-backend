@@ -11,6 +11,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.enableCors({
+    origin: [process.env.CORS_ORIGIN],
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

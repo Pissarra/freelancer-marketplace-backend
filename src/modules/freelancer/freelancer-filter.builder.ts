@@ -45,7 +45,7 @@ export class FreelancerFilterBuilder {
       this.qb.innerJoin(
         'freelancer.skills',
         'skills_join',
-        'skills_join.description IN (:...skills)',
+        '(:...skills) IN (skills_join.description)',
         { skills },
       );
     }
@@ -54,6 +54,7 @@ export class FreelancerFilterBuilder {
   }
 
   applyPermissionsFilter(permissions?: string[]): this {
+    console.info('Applying permissions filter:', permissions);
     if (permissions && permissions.length) {
       this.qb.innerJoin(
         'freelancer.allowedPermissions',

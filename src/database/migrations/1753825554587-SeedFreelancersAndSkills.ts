@@ -64,8 +64,8 @@ export class SeedFreelancersAndSkills1753825554587
 
     await queryRunner.query(`
       INSERT INTO user_permissions_permission (user_id, permission_id) VALUES
-      (1, 1),
-      (2, 1), (2, 2);
+      (1, 1), (1, 2),
+      (2, 2);
     `);
   }
 

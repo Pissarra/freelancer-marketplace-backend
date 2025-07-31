@@ -24,7 +24,7 @@ export class FreelancerService {
 
     const builder = new FreelancerFilterBuilder(qb, filters)
       .applyFilters()
-      .applyPermissionsFilter( user.permissions);
+      .applyPermissionsFilter(user.permissions);
 
     return builder
       .build()

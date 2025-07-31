@@ -27,7 +27,7 @@ export class FreelancerFilterDto {
 
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value }) => value === 'true')
+  // @Transform(({ value }) => value === 'true')
   availableOnly?: boolean;
 
   @IsOptional()
