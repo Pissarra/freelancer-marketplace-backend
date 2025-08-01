@@ -43,6 +43,7 @@ DATABASE_NAME=postgres
 DATABASE_PORT=5432
 DATABASE_HOST=localhost
 DATABASE_SYNCHRONIZE=false
+DATABASE_SSL=false
 
 JWT_SECRET=FREELANCER_SECRET_KEY_HERE
 JWT_TOKEN_AUDIENCE=localhost:3000
@@ -53,6 +54,7 @@ CORS_ORIGIN=http://localhost:4000
 ```
 
 * It is recommended to set `DATABASE_SYNCHRONIZE` to `false` in production environments to avoid data loss. However, you can set it to `true` during development for automatic schema synchronization, so you will not need to run the migrations.
+* It is recommended to set `DATABASE_SSL` to `true` in production environments to ensure secure connections to the database. However, you can set it to `false` during development if you are running the database locally without SSL.
 
 ## Database setup
 
