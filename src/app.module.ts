@@ -20,7 +20,7 @@ import { AuthModule } from './auth/auth.module';
       database: process.env.DATABASE_NAME,
       synchronize: process.env.DATABASE_SYNCHRONIZE === 'true', // your entities will be synced with the database(recommended: disable in prod)
       autoLoadEntities: true,
-      ssl: true,
+      ssl: process.env.DATABASE_SSL === 'true',
     }),
   ],
   controllers: [AppController],

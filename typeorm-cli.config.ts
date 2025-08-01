@@ -12,7 +12,7 @@ export default new DataSource({
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  ssl: true,
+  ssl: process.env.DATABASE_SSL === 'true',
   logging: ['query'],
   entities: [], // Adjust as needed
   migrations: [
